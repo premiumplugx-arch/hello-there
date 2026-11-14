@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPlaylistRouteImport } from './routes/api/playlist'
+import { Route as ApiPublicPlaylistRouteImport } from './routes/api/public/playlist'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPlaylistRoute = ApiPlaylistRouteImport.update({
+  id: '/api/playlist',
+  path: '/api/playlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPlaylistRoute = ApiPublicPlaylistRouteImport.update({
+  id: '/api/public/playlist',
+  path: '/api/public/playlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/playlist': typeof ApiPlaylistRoute
+  '/api/public/playlist': typeof ApiPublicPlaylistRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/playlist': typeof ApiPlaylistRoute
+  '/api/public/playlist': typeof ApiPublicPlaylistRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/playlist': typeof ApiPlaylistRoute
+  '/api/public/playlist': typeof ApiPublicPlaylistRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/api/playlist' | '/api/public/playlist'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/api/playlist' | '/api/public/playlist'
+  id: '__root__' | '/' | '/api/playlist' | '/api/public/playlist'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiPlaylistRoute: typeof ApiPlaylistRoute
+  ApiPublicPlaylistRoute: typeof ApiPublicPlaylistRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/playlist': {
+      id: '/api/playlist'
+      path: '/api/playlist'
+      fullPath: '/api/playlist'
+      preLoaderRoute: typeof ApiPlaylistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/playlist': {
+      id: '/api/public/playlist'
+      path: '/api/public/playlist'
+      fullPath: '/api/public/playlist'
+      preLoaderRoute: typeof ApiPublicPlaylistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiPlaylistRoute: ApiPlaylistRoute,
+  ApiPublicPlaylistRoute: ApiPublicPlaylistRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
